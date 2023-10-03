@@ -116,11 +116,29 @@
         const textEditElement = document.querySelector(".edit-form-text");
         comments[index].isEdit = false;
         comments[index].text = textEditElement.value;
+
+        if (comments[index].text === "") {
+          saveButtonElement.disabled = true;
+          return;
+        }
         event.stopPropagation();
         renderComments();
       })
     }
   }
+  
+  const stopPropagationForEditInput = () => {
+    const inputEditElements = document.querySelectorAll(".edit-form-text");
+    const saveButtonElement = document.querySelector(".save-button");
+    for (const inputEditElement of inputEditElements) {
+
+      inputEditElement.addEventListener("click", () => {
+        saveButtonElement.disabled = false;
+        event.stopPropagation();
+      })
+    }
+  }
+
   const responsToComment = () => {
     const commentElements = document.querySelectorAll(".comment");
 
@@ -140,7 +158,7 @@
       let editButton;
 
       if (comment.isEdit) {
-        editInput = `<textarea type="textarea" class="edit-form-text"  value="" id="editTextArea">${comment.text}</textarea>`;
+        editInput = `<textarea type="textarea" class="edit-form-text"  value="" id="editTextArea" data-index="${index}">${comment.text}</textarea>`;
         editButton = `<button class="save-button" data-index="${index}">Coхранить</button>`;
       } else {
         editInput = `<div class="comment-text">${comment.text}</div>`;
@@ -173,6 +191,16 @@
     initEdit();
     initSave();
     responsToComment();
+    stopPropagationForEditInput();
+
+    const btnEditElements = document.querySelectorAll(".edit-button");
+    const btnSaveElements = document.querySelectorAll(".save-button")
+    if (btnSaveElements.length > 0) {
+      for (const btnEditElement of btnEditElements) {
+        btnEditElement.disabled = true;
+      }
+    }
+
   };
 
   renderComments();
@@ -223,19 +251,20 @@
   }
 
   document.addEventListener("keyup", (event) => {
-    if (event.code === 'Enter') {
+    if (event.code === 'Enter' && nameInputElement.value !== '' && textInputElement.value !== '' ) {
       addComment();
     }
   })
+
   btnAddCommentElement.addEventListener("click", addComment);
 
   btnDelCommentElement.addEventListener("click", () => {
-    
+
     comments.pop();
 
     renderComments();
 
-  })   
+  })
 
 </script>
 
