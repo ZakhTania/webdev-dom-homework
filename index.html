@@ -54,22 +54,22 @@
 
   nameInputElement.addEventListener("input", () => {
 
-    if (nameInputElement.value === '') {
+    if (nameInputElement.value.trim() === '') {
       btnAddCommentElement.disabled = true;
     }
 
-    if (nameInputElement.value !== '' && textInputElement.value !== '') {
+    if (nameInputElement.value.trim() !== '' && textInputElement.value.trim() !== '') {
       btnAddCommentElement.disabled = false;
     }
 
   })
   textInputElement.addEventListener("input", () => {
 
-    if (textInputElement.value === '') {
+    if (textInputElement.value.trim() === '') {
       btnAddCommentElement.disabled = true;
     }
 
-    if (nameInputElement.value !== '' && textInputElement.value !== '') {
+    if (nameInputElement.value.trim() !== '' && textInputElement.value.trim() !== '') {
       btnAddCommentElement.disabled = false;
     }
 
@@ -117,7 +117,7 @@
         comments[index].isEdit = false;
         comments[index].text = textEditElement.value;
 
-        if (comments[index].text === "") {
+        if (comments[index].text.trim() === "") {
           saveButtonElement.disabled = true;
           return;
         }
