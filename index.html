@@ -30,7 +30,9 @@
   const nameInputElement = document.querySelector(".add-form-name");
   const textInputElement = document.querySelector(".add-form-text");
   const btnDelCommentElement = document.querySelector(".delete-form-button");
-  let userLikes = 0;
+
+
+
 
   const comments = [
     {
@@ -53,22 +55,22 @@
 
   nameInputElement.addEventListener("input", () => {
 
-    if (nameInputElement.value === '') {
+    if (nameInputElement.value.trim() === '') {
       btnAddCommentElement.disabled = true;
     }
 
-    if (nameInputElement.value !== '' && textInputElement.value !== '') {
+    if (nameInputElement.value.trim() !== '' && textInputElement.value.trim() !== '') {
       btnAddCommentElement.disabled = false;
     }
 
   })
   textInputElement.addEventListener("input", () => {
 
-    if (textInputElement.value === '') {
+    if (textInputElement.value.trim() === '') {
       btnAddCommentElement.disabled = true;
     }
 
-    if (nameInputElement.value !== '' && textInputElement.value !== '') {
+    if (nameInputElement.value.trim() !== '' && textInputElement.value.trim() !== '') {
       btnAddCommentElement.disabled = false;
     }
 
@@ -87,6 +89,7 @@
           comments[index].likesCounter += 1;
           comments[index].isLiked = true;
         }
+        event.stopPropagation();
         renderComments();
       })
     }
@@ -99,6 +102,7 @@
       editButtonElement.addEventListener("click", () => {
         const index = editButtonElement.dataset.index;
         comments[index].isEdit = true;
+        event.stopPropagation();
         renderComments();
       })
     }
@@ -113,7 +117,37 @@
         const textEditElement = document.querySelector(".edit-form-text");
         comments[index].isEdit = false;
         comments[index].text = textEditElement.value;
+
+        if (comments[index].text.trim() === "") {
+          saveButtonElement.disabled = true;
+          return;
+        }
+        event.stopPropagation();
         renderComments();
+      })
+    }
+  }
+  
+  const stopPropagationForEditInput = () => {
+    const inputEditElements = document.querySelectorAll(".edit-form-text");
+    const saveButtonElement = document.querySelector(".save-button");
+    for (const inputEditElement of inputEditElements) {
+
+      inputEditElement.addEventListener("click", () => {
+        saveButtonElement.disabled = false;
+        event.stopPropagation();
+      })
+    }
+  }
+
+  const responsToComment = () => {
+    const commentElements = document.querySelectorAll(".comment");
+
+    for (const commentElement of commentElements) {
+      commentElement.addEventListener('click', () => {
+        const index = commentElement.dataset.index;
+        const text = comments[index].text;
+        textInputElement.value = text;
       })
     }
   }
@@ -125,14 +159,14 @@
       let editButton;
 
       if (comment.isEdit) {
-        editInput = `<textarea type="textarea" class="edit-form-text"  value="" id="editTextArea">${comment.text}</textarea>`;
+        editInput = `<textarea type="textarea" class="edit-form-text"  value="" id="editTextArea" data-index="${index}">${comment.text}</textarea>`;
         editButton = `<button class="save-button" data-index="${index}">Coхранить</button>`;
       } else {
         editInput = `<div class="comment-text">${comment.text}</div>`;
         editButton = `<button class="edit-button" data-index="${index}">Редактировать</button>`;
       }
 
-      return `<li class="comment">
+      return `<li class="comment" data-index="${index}">
           <div class="comment-header">
             <div>${comment.name}</div>
             <div>${comment.data}</div>
@@ -153,16 +187,24 @@
 
     listElement.innerHTML = commentsHtml;
 
-    textInputElement.value = '';
-    nameInputElement.value = '';
     btnAddCommentElement.disabled = true;
     initAddLikes();
     initEdit();
     initSave();
+    responsToComment();
+    stopPropagationForEditInput();
+
+    const btnEditElements = document.querySelectorAll(".edit-button");
+    const btnSaveElements = document.querySelectorAll(".save-button")
+    if (btnSaveElements.length > 0) {
+      for (const btnEditElement of btnEditElements) {
+        btnEditElement.disabled = true;
+      }
+    }
+
   };
 
   renderComments();
-
 
   function addComment() {
     let date = new Date();
@@ -189,28 +231,40 @@
 
 
     comments.push({
-      name: nameInputElement.value,
-      text: textInputElement.value,
+      name: nameInputElement.value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;"),
+      text: textInputElement.value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;"),
       data: dateComment,
       likesCounter: 0,
       isLiked: false,
       isEdit: false,
     });
-
+    textInputElement.value = '';
+    nameInputElement.value = '';
     renderComments();
   }
 
   document.addEventListener("keyup", (event) => {
-    if (event.code === 'Enter') {
+    if (event.code === 'Enter' && nameInputElement.value !== '' && textInputElement.value !== '' ) {
       addComment();
     }
   })
+
   btnAddCommentElement.addEventListener("click", addComment);
 
   btnDelCommentElement.addEventListener("click", () => {
-    const oldListHtml = listElement.innerHTML;
-    const deleteElement = oldListHtml.lastIndexOf('<li class="comment">');
-    listElement.innerHTML = oldListHtml.substring(0, deleteElement);
+
+    comments.pop();
+
+    renderComments();
+
   })
 
 </script>
