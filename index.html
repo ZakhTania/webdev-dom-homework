@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 
+
 <head>
   <title>Проект "Комменты"</title>
   <meta charset="utf-8" />
@@ -71,13 +72,14 @@
       btnAddCommentElement.disabled = false;
 
     } else {
-
+      
       btnAddCommentElement.disabled = true;
     }
-  })
+  });
 
   const stopEmptyInput = () => {
     const textareaElements = document.querySelectorAll(".edit-form-text");
+
 
     for (const textareaElement of textareaElements) {
 
@@ -181,7 +183,7 @@
 
   const renderComments = () => {
     const commentsHtml = comments.map((comment, index) => {
-
+      
       return `<li class="comment" data-index="${index}">
           <div class="comment-header">
             <div>${comment.name}</div>
