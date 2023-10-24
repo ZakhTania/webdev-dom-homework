@@ -44,7 +44,11 @@
       method: "GET"
     })
       .then((response) => {
-        return response.json();
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error(`Кажется, что-то пошло не так, попробуйте позже`);
+        }
       })
       .then((responseDate) => {
         const appComments = responseDate.comments.map((comment) => {
@@ -66,6 +70,10 @@
 
         renderComments();
 
+      })
+      .catch((error) => {
+        alert(error.message);
+        console.warn(error);
       })
   }
 
@@ -231,7 +239,6 @@
     stopEmptyInput();
   };
 
-  renderComments();
 
   function currentDate(commentDate) {
 
@@ -259,23 +266,50 @@
       body: JSON.stringify({
         text: sanitizeHtml(textInputElement.value),
         name: sanitizeHtml(nameInputElement.value),
+        forceError: true,
       })
     })
       .then((response) => {
-
-        return response.json();
+        if (response.status === 500) {
+          throw new Error(`Ошибка сервера`);
+        } else if (response.status === 400) {
+          throw new Error(`Имя и комментарий должны быть не короче 3х символов`);
+        } else {
+          return response.json();
+        }
       })
       .then((responseDate) => {
-
-
 
         getCommentsFetch();
 
       })
-    nameInputElement.value = '';
-    textInputElement.value = '';
+      .then(() => {
+        nameInputElement.value = '';
+        textInputElement.value = '';
 
-    btnAddCommentElement.disabled = true;
+        btnAddCommentElement.disabled = true;
+      })
+      .catch((error) => {
+        addFormElement.classList.remove("displayHidden");
+        loadingCommentElement.classList.add("displayHidden");
+
+        console.warn(error);
+
+        if (error.message === "Ошибка сервера") {
+
+          addComment();
+
+        } else if (error.message === "Имя и комментарий должны быть не короче 3х символов") {
+
+          alert(error.message);
+
+        } else {
+
+          alert(`Кажется что-то пошло не так, попробуй позже`);
+
+        }
+      })
+
   }
 
   document.addEventListener("keyup", (event) => {
@@ -295,6 +329,7 @@
     renderComments();
 
   })
+
   getCommentsFetch();
 </script>
 
