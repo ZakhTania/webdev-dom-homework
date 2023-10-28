@@ -1,4 +1,4 @@
-import { initAddLikes, initEdit, initQuotingComment, stopEmptyInput, stopPropagationForEditInput } from "./events.js";
+// import { initAddLikes, initEdit, initQuotingComment, stopEmptyInput, stopPropagationForEditInput } from "./events.js";
 
 export function renderComments(comments) {
     const listElement = document.querySelector(".comments");
@@ -17,7 +17,6 @@ export function renderComments(comments) {
                     .replaceAll("QUOTE_END", "</div>")}
                 </div>`}
         </div>
-          <button class="edit-button" data-index="${index}">${comment.isEdited ? `Coхранить` : `Редактировать`}</button>
         <div class="comment-footer">
           <div class="likes">
             <span class="likes-counter">${comment.likesCounter}</span>
@@ -29,10 +28,10 @@ export function renderComments(comments) {
     }).join('');
 
     listElement.innerHTML = commentsHtml;
-
-    initAddLikes(comments);
-    initEdit(comments);
-    initQuotingComment(comments);
-    stopPropagationForEditInput();
-    stopEmptyInput();
+  // <button class="edit-button" data-index="${index}">${comment.isEdited ? `Coхранить` : `Редактировать`}</button>
+    // initAddLikes(comments);
+    // initEdit(comments);
+    // initQuotingComment(comments);
+    // stopPropagationForEditInput();
+    // stopEmptyInput();
 }

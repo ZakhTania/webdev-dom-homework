@@ -1,6 +1,9 @@
 body {
     margin: 0;
   }
+  a {
+    color: inherit;
+  }
 
   .container {
     font-family: Helvetica;
