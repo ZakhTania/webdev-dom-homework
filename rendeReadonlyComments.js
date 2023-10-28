@@ -1,3 +1,4 @@
+import { renderLogin } from "./renderLoginPage.js";
 
 export const renderCommentsReadonly = ({ fetchAndRenderComments }) => {
     const appElement = document.getElementById("app");
@@ -19,7 +20,7 @@ export const renderCommentsReadonly = ({ fetchAndRenderComments }) => {
     console.log(authorizationLinkElement);
 
     authorizationLinkElement.addEventListener("click", () => {
-
+renderLogin();
     })
  
 }

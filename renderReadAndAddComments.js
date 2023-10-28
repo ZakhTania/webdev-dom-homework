@@ -1,8 +1,13 @@
 
-export const renderReadandAddComments = ({fetchAndRenderComments}) => {
+let userName;
+export const setUsername = (newUsername) => {
+    userName = newUsername;
+}
+
+export const renderReadandAddComments = ({ fetchAndRenderComments }) => {
     const appElement = document.getElementById("app");
 
-const renderCommentsReadonlyHtml = `
+    const renderCommentsReadonlyHtml = `
 <div class="container">
 <ul class="comments">
 </ul>
@@ -18,91 +23,91 @@ const renderCommentsReadonlyHtml = `
 </div>
 </div>
 `;
-appElement.innerHTML = renderCommentsReadonlyHtml;
+    appElement.innerHTML = renderCommentsReadonlyHtml;
 
 
-const nameInputElement = document.querySelector(".add-form-name");
-const textInputElement = document.querySelector(".add-form-text");
-const btnAddCommentElement = document.querySelector(".add-form-button");
-const btnDelCommentElement = document.querySelector(".delete-form-button");
-// const addFormElement = document.querySelector(".add-form");
-// const loadingCommentElement = document.querySelector(".loading-comment");
+    const nameInputElement = document.querySelector(".add-form-name");
+    const textInputElement = document.querySelector(".add-form-text");
+    const btnAddCommentElement = document.querySelector(".add-form-button");
+    const btnDelCommentElement = document.querySelector(".delete-form-button");
+    // const addFormElement = document.querySelector(".add-form");
+    // const loadingCommentElement = document.querySelector(".loading-comment");
 
 
-function addComment() {
-    // addFormElement.classList.add("displayHidden");
-    // loadingCommentElement.classList.remove("displayHidden");
+    function addComment() {
+        // addFormElement.classList.add("displayHidden");
+        // loadingCommentElement.classList.remove("displayHidden");
 
-    postComment({ text: textInputElement.value, name: nameInputElement.value })
-        .then(() => {
+        postComment({ text: textInputElement.value, name: nameInputElement.value })
+            .then(() => {
 
-            fetchAndRenderComments();
+                fetchAndRenderComments();
 
-        })
-        .then(() => {
-            nameInputElement.value = '';
-            textInputElement.value = '';
+            })
+            .then(() => {
+                nameInputElement.value = '';
+                textInputElement.value = '';
+
+                btnAddCommentElement.disabled = true;
+            })
+            .catch((error) => {
+                // addFormElement.classList.remove("displayHidden");
+                // loadingCommentElement.classList.add("displayHidden");
+
+                console.warn(error);
+
+                if (error.message === "Ошибка сервера") {
+
+                    addComment();
+
+                } else if (error.message === "Имя и комментарий должны быть не короче 3х символов") {
+
+                    alert(error.message);
+
+                } else {
+
+                    alert(`Кажется что-то пошло не так, попробуй позже`);
+
+                }
+            })
+
+    }
+
+
+    document.addEventListener("keyup", (event) => {
+
+        if (
+            event.code === 'Enter' &&
+            nameInputElement.value.trim() !== '' &&
+            textInputElement.value.trim() !== '') {
+
+            addComment();
+        }
+    })
+
+    document.addEventListener("input", () => {
+
+        if (
+            nameInputElement.value.trim() !== '' &&
+            textInputElement.value.trim() !== ''
+        ) {
+
+            btnAddCommentElement.disabled = false;
+
+        } else {
 
             btnAddCommentElement.disabled = true;
-        })
-        .catch((error) => {
-            // addFormElement.classList.remove("displayHidden");
-            // loadingCommentElement.classList.add("displayHidden");
+        }
+    })
 
-            console.warn(error);
+    btnAddCommentElement.addEventListener("click", addComment);
 
-            if (error.message === "Ошибка сервера") {
+    btnDelCommentElement.addEventListener("click", () => {
 
-                addComment();
+        comments.pop();
 
-            } else if (error.message === "Имя и комментарий должны быть не короче 3х символов") {
+        renderComments(comments);
 
-                alert(error.message);
-
-            } else {
-
-                alert(`Кажется что-то пошло не так, попробуй позже`);
-
-            }
-        })
-
-}
-
-
-document.addEventListener("keyup", (event) => {
-
-    if (
-        event.code === 'Enter' &&
-        nameInputElement.value.trim() !== '' &&
-        textInputElement.value.trim() !== '') {
-
-        addComment();
-    }
-})
-
-document.addEventListener("input", () => {
-
-    if (
-        nameInputElement.value.trim() !== '' &&
-        textInputElement.value.trim() !== ''
-    ) {
-
-        btnAddCommentElement.disabled = false;
-
-    } else {
-
-        btnAddCommentElement.disabled = true;
-    }
-})
-
-btnAddCommentElement.addEventListener("click", addComment);
-
-btnDelCommentElement.addEventListener("click", () => {
-
-    comments.pop();
-
-    renderComments(comments);
-
-})
-fetchAndRenderComments();
+    })
+    fetchAndRenderComments();
 }

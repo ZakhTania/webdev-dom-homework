@@ -1,7 +1,17 @@
 import { sanitizeHtml } from "./helper.js";
 
+
+const commentsURL = "https://wedev-api.sky.pro/api/v2/tanya-zakharova/comments";
+const userURL = "https://wedev-api.sky.pro/api/user/login";
+
+let token;
+
+export const setToken = (newToken) => {
+  token = newToken;
+};
+
 export function getComments() {
-    return fetch("https://wedev-api.sky.pro/api/v1/tanya-zakharova/comments", {
+    return fetch(commentsURL, {
         method: "GET"
     })
         .then((response) => {
@@ -14,7 +24,7 @@ export function getComments() {
 }
 
 export function postComment({ text, name }) {
-    return fetch("https://wedev-api.sky.pro/api/v1/tanya-zakharova/comments", {
+    return fetch(commentsURL, {
         method: "POST",
         body: JSON.stringify({
             text: sanitizeHtml(text),
@@ -32,3 +42,24 @@ export function postComment({ text, name }) {
             }
         })
 }
+
+export function login({ login, password }) {
+    return fetch(userURL, {
+      method: "POST",
+      body: JSON.stringify({
+        login,
+        password,
+      }),
+    })
+      .then((response) => {
+        if (response.status === 400) {
+          throw new Error("Неверный логин или пароль");
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        console.warn(error);
+        alert(error.message);
+        return error;
+      })
+  }
