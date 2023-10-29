@@ -34,7 +34,7 @@ export const renderLogin = () => {
         })
             .then((response) => {
                 if (response.message === "Неверный логин или пароль") {
-                    throw new Error('Повторите попытку');
+                    throw new Error('Неверный логин или пароль. Повторите попытку');
                 }
                 return response;
             })

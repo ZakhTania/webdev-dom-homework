@@ -60,7 +60,6 @@ export function login({ login, password }) {
       })
       .catch((error) => {
         console.warn(error);
-        alert(error.message);
         return error;
       })
   }
