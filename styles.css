@@ -145,6 +145,7 @@ margin: 0 0 13px;
 .add-form-name {
   width: 300px;
   padding: 11px 22px;
+  background-color: rgba(211, 211, 211, 0.795);
 }
 
 .auhtorization-form_input {
@@ -213,7 +214,7 @@ margin: 0 0 13px;
   margin-bottom: 18px;
 }
 
-.displayHidden {
+.hidden {
   display: none;
 }
 

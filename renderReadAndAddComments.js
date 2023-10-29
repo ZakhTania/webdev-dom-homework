@@ -1,3 +1,4 @@
+import { postComment } from "./api.js";
 
 let userName;
 export const setUsername = (newUsername) => {
@@ -9,50 +10,52 @@ export const renderReadandAddComments = ({ fetchAndRenderComments }) => {
 
     const renderCommentsReadonlyHtml = `
 <div class="container">
+<div class="loading-comment" id="loading-comments">Загрузка комментариев...</div>
+<div id="wrapper_authorization-link"></div>
 <ul class="comments">
 </ul>
-<div class="loading-comment">Комментарий добавляется...</div>
+<div class="loading-comment" id="comment-loading">Комментарий добавляется...</div>
 <div class="add-form">
-<input type="text" class="add-form-name" placeholder="Введите ваше имя" />
+<input type="text" class="add-form-name" placeholder="${userName}" readonly />
 <textarea type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4"></textarea>
 <div class="add-form-row">
   <button class="add-form-button">Написать</button>
-</div>
-</div>
-<button class="delete-form-button">Удалить последний комментарий</button>
 </div>
 </div>
 `;
     appElement.innerHTML = renderCommentsReadonlyHtml;
 
 
-    const nameInputElement = document.querySelector(".add-form-name");
+    // const nameInputElement = document.querySelector(".add-form-name");
     const textInputElement = document.querySelector(".add-form-text");
     const btnAddCommentElement = document.querySelector(".add-form-button");
-    const btnDelCommentElement = document.querySelector(".delete-form-button");
-    // const addFormElement = document.querySelector(".add-form");
-    // const loadingCommentElement = document.querySelector(".loading-comment");
-
+    // const btnDelCommentElement = document.querySelector(".delete-form-button");
+    const addFormElement = document.querySelector(".add-form");
+    const loadingCommentElement = document.getElementById("comment-loading");
+    loadingCommentElement.classList.add("hidden");
 
     function addComment() {
-        // addFormElement.classList.add("displayHidden");
-        // loadingCommentElement.classList.remove("displayHidden");
 
-        postComment({ text: textInputElement.value, name: nameInputElement.value })
+        addFormElement.classList.add("hidden");
+        loadingCommentElement.classList.remove("hidden");
+
+        postComment({ text: textInputElement.value })
             .then(() => {
 
                 fetchAndRenderComments();
 
             })
             .then(() => {
-                nameInputElement.value = '';
                 textInputElement.value = '';
 
                 btnAddCommentElement.disabled = true;
+                addFormElement.classList.remove("hidden");
+                loadingCommentElement.classList.add("hidden");
+              
             })
             .catch((error) => {
-                // addFormElement.classList.remove("displayHidden");
-                // loadingCommentElement.classList.add("displayHidden");
+                addFormElement.classList.remove("hidden");
+                loadingCommentElement.classList.add("hidden");
 
                 console.warn(error);
 
@@ -78,7 +81,6 @@ export const renderReadandAddComments = ({ fetchAndRenderComments }) => {
 
         if (
             event.code === 'Enter' &&
-            nameInputElement.value.trim() !== '' &&
             textInputElement.value.trim() !== '') {
 
             addComment();
@@ -87,10 +89,7 @@ export const renderReadandAddComments = ({ fetchAndRenderComments }) => {
 
     document.addEventListener("input", () => {
 
-        if (
-            nameInputElement.value.trim() !== '' &&
-            textInputElement.value.trim() !== ''
-        ) {
+        if (textInputElement.value.trim() !== '') {
 
             btnAddCommentElement.disabled = false;
 
@@ -102,12 +101,13 @@ export const renderReadandAddComments = ({ fetchAndRenderComments }) => {
 
     btnAddCommentElement.addEventListener("click", addComment);
 
-    btnDelCommentElement.addEventListener("click", () => {
+    // btnDelCommentElement.addEventListener("click", () => {
 
-        comments.pop();
+    //     comments.pop();
 
-        renderComments(comments);
+    //     renderComments(comments);
 
-    })
+    // })
+
     fetchAndRenderComments();
 }

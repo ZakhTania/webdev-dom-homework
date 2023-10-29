@@ -23,13 +23,14 @@ export function getComments() {
         })
 }
 
-export function postComment({ text, name }) {
+export function postComment({ text }) {
     return fetch(commentsURL, {
         method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+          },
         body: JSON.stringify({
             text: sanitizeHtml(text),
-            name: sanitizeHtml(name),
-            forceError: true,
         })
     })
         .then((response) => {

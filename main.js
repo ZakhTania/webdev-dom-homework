@@ -1,22 +1,16 @@
-import { getComments} from "./api.js";
+import { getComments } from "./api.js";
 import { renderComments } from "./render.js";
 import { dateFormat } from "./helper.js";
-import { renderCommentsReadonly } from "./rendeReadonlyComments.js";
+import { renderCommentsReadonly } from "./renderReadonlyComments.js";
+import { loader } from "./renderReadonlyComments.js";
 
 
 
-// const nameInputElement = document.querySelector(".add-form-name");
-// const textInputElement = document.querySelector(".add-form-text");
-// const btnAddCommentElement = document.querySelector(".add-form-button");
-// const btnDelCommentElement = document.querySelector(".delete-form-button");
-// const addFormElement = document.querySelector(".add-form");
-// const loadingCommentElement = document.querySelector(".loading-comment");
-
+export let isLoading = true;
 let comments = [];
 
 export function fetchAndRenderComments() {
 
-    // loadingCommentElement.textContent = "Загрузка комментариев"
 
     getComments()
         .then((responseDate) => {
@@ -34,10 +28,10 @@ export function fetchAndRenderComments() {
 
             comments = appComments;
 
-            // addFormElement.classList.remove("displayHidden");
-            // loadingCommentElement.classList.add("displayHidden");
-
             renderComments(comments);
+            isLoading = false;
+            loader({ isLoading });
+            isLoading = true;
 
         })
         .catch((error) => {
@@ -46,7 +40,7 @@ export function fetchAndRenderComments() {
         })
 }
 
-renderCommentsReadonly({fetchAndRenderComments});
+renderCommentsReadonly({ fetchAndRenderComments });
 
 
 
