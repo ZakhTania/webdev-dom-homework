@@ -62,7 +62,8 @@ a {
 
 .comment-footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .comment-body {
@@ -180,7 +181,7 @@ margin: 0 0 13px;
   opacity: 0.9;
 }
 
-.delete-form-button,
+.delete-button,
 .edit-button,
 .save-button {
   margin-top: 24px;
@@ -192,7 +193,7 @@ margin: 0 0 13px;
   cursor: pointer;
 }
 
-.delete-form-button:hover,
+.delete-button:hover,
 .edit-button:hover,
 .save-button:hover {
   opacity: 0.9;
@@ -251,4 +252,8 @@ margin: 0 0 13px;
 
 .authorization-form_link:hover {
   text-decoration: underline;
+}
+.edit-del-wrapper {
+  display: flex;
+  gap: 24px;
 }

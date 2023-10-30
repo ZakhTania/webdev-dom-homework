@@ -1,21 +1,17 @@
 import { getComments } from "./api.js";
-import { renderComments } from "./render.js";
 import { dateFormat } from "./helper.js";
-import { renderCommentsReadonly } from "./renderReadonlyComments.js";
-import { loader } from "./renderReadonlyComments.js";
+import { renderMainPage } from "./renderMainPage.js";
+import { renderComments } from "./renderComments.js";
 
-
-
-export let isLoading = true;
 let comments = [];
 
 export function fetchAndRenderComments() {
-
 
     getComments()
         .then((responseDate) => {
             const appComments = responseDate.comments.map((comment) => {
                 return {
+                    id: comment.id,
                     name: comment.author.name,
                     text: comment.text,
                     date: dateFormat(comment.date),
@@ -23,15 +19,13 @@ export function fetchAndRenderComments() {
                     isLiked: false,
                     isLikeLoading: false,
                     isEdited: false,
+                    author: comment.author.name,
                 };
             });
 
             comments = appComments;
 
             renderComments(comments);
-            isLoading = false;
-            loader({ isLoading });
-            isLoading = true;
 
         })
         .catch((error) => {
@@ -40,7 +34,7 @@ export function fetchAndRenderComments() {
         })
 }
 
-renderCommentsReadonly({ fetchAndRenderComments });
+renderMainPage({ fetchAndRenderComments });
 
 
 

@@ -1,4 +1,4 @@
-import { renderComments } from "./render.js";
+import { renderComments } from "./renderComments.js";
 import { delay, sanitizeHtml } from "./helper.js";
 
 export function initAddLikes(comments) {

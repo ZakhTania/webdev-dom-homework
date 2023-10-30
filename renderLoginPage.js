@@ -1,7 +1,6 @@
-import { renderReadandAddComments, setUsername } from "./renderReadAndAddComments.js"; 
-import { login, setToken  } from "./api.js";
-import { fetchAndRenderComments } from "./main.js"; 
-
+import { renderMainPage } from "./renderMainPage.js";
+import { login, setToken, setUsername } from "./api.js";
+import { fetchAndRenderComments } from "./main.js";
 
 export const renderLogin = () => {
     const appElement = document.getElementById("app");
@@ -43,8 +42,8 @@ export const renderLogin = () => {
                 setUsername(responseData.user.name);
             })
             .then(() => {
-               
-                renderReadandAddComments({fetchAndRenderComments});
+
+                renderMainPage({ fetchAndRenderComments });
             })
             .catch((error) => {
                 alert(error.message);

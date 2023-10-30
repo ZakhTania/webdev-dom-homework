@@ -1,14 +1,17 @@
 import { sanitizeHtml } from "./helper.js";
 
-
 const commentsURL = "https://wedev-api.sky.pro/api/v2/tanya-zakharova/comments";
 const userURL = "https://wedev-api.sky.pro/api/user/login";
 
-let token;
+export let token;
+export let userName;
 
 export const setToken = (newToken) => {
   token = newToken;
 };
+export const setUsername = (newUsername) => {
+    userName = newUsername;
+}
 
 export function getComments() {
     return fetch(commentsURL, {
@@ -61,5 +64,17 @@ export function login({ login, password }) {
       .catch((error) => {
         console.warn(error);
         return error;
+      })
+  }
+
+  export function deleteComment({ id }) {
+    return fetch(`${commentsURL}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+      .then((response) => {
+        return response.json();
       })
   }

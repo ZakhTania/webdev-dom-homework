@@ -1,19 +1,19 @@
 import { postComment } from "./api.js";
+import { renderLogin } from "./renderLoginPage.js";
+import { token, userName } from "./api.js";
 
-let userName;
-export const setUsername = (newUsername) => {
-    userName = newUsername;
-}
 
-export const renderReadandAddComments = ({ fetchAndRenderComments }) => {
+export const renderMainPage = ({ fetchAndRenderComments }) => {
     const appElement = document.getElementById("app");
 
-    const renderCommentsReadonlyHtml = `
-<div class="container">
+    const mainPageHtml = `<div class="container">
 <div class="loading-comment" id="loading-comments">Загрузка комментариев...</div>
 <div id="wrapper_authorization-link"></div>
 <ul class="comments">
 </ul>
+<div id="wrapper-authorization-link">
+<p>Чтобы добавить комментарий, <a href="#" id="authorization-link">авторизируйтесь</a></p>
+</div>
 <div class="loading-comment" id="comment-loading">Комментарий добавляется...</div>
 <div class="add-form">
 <input type="text" class="add-form-name" placeholder="${userName}" readonly />
@@ -21,18 +21,37 @@ export const renderReadandAddComments = ({ fetchAndRenderComments }) => {
 <div class="add-form-row">
   <button class="add-form-button">Написать</button>
 </div>
-</div>
-`;
-    appElement.innerHTML = renderCommentsReadonlyHtml;
+</div>`;
 
+    appElement.innerHTML = mainPageHtml;
 
-    // const nameInputElement = document.querySelector(".add-form-name");
     const textInputElement = document.querySelector(".add-form-text");
     const btnAddCommentElement = document.querySelector(".add-form-button");
-    // const btnDelCommentElement = document.querySelector(".delete-form-button");
     const addFormElement = document.querySelector(".add-form");
+    const authorizationLinkWrapperElement = document.getElementById("wrapper-authorization-link");
+
     const loadingCommentElement = document.getElementById("comment-loading");
     loadingCommentElement.classList.add("hidden");
+
+
+
+    if (token) {
+        authorizationLinkWrapperElement.classList.add('hidden');
+        addFormElement.classList.remove('hidden');
+    } else {
+        authorizationLinkWrapperElement.classList.remove('hidden');
+        addFormElement.classList.add('hidden');
+    }
+
+    fetchAndRenderComments();
+
+    const authorizationLinkElement = document.getElementById("authorization-link");
+    authorizationLinkElement.addEventListener("click", () => {
+        renderLogin();
+    });
+
+
+
 
     function addComment() {
 
@@ -51,7 +70,7 @@ export const renderReadandAddComments = ({ fetchAndRenderComments }) => {
                 btnAddCommentElement.disabled = true;
                 addFormElement.classList.remove("hidden");
                 loadingCommentElement.classList.add("hidden");
-              
+
             })
             .catch((error) => {
                 addFormElement.classList.remove("hidden");
@@ -100,14 +119,6 @@ export const renderReadandAddComments = ({ fetchAndRenderComments }) => {
     })
 
     btnAddCommentElement.addEventListener("click", addComment);
-
-    // btnDelCommentElement.addEventListener("click", () => {
-
-    //     comments.pop();
-
-    //     renderComments(comments);
-
-    // })
 
     fetchAndRenderComments();
 }
