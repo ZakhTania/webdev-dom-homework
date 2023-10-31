@@ -32,7 +32,7 @@ a {
 
 .comment,
 .add-form,
-.loading-comment,
+.loader,
 .authorization-form {
   width: 596px;
   box-sizing: border-box;
@@ -111,21 +111,23 @@ a {
 }
 
 .authorization-form {
- box-sizing: border-box;
+  box-sizing: border-box;
 }
+
 .authorization-form_title {
-font-size: 24px;
-font-weight: normal;
-margin: 0 0 13px;
- }
-.loading-comment {
+  font-size: 24px;
+  font-weight: normal;
+  margin: 0 0 13px;
+}
+
+.loader {
   padding: 20px;
   margin-top: 48px;
   display: flex;
   justify-content: space-between;
 }
 
-.loading-comment::after {
+.loader::after {
   content: '';
   background-image: url("loading.gif");
   width: 25px;
@@ -253,6 +255,7 @@ margin: 0 0 13px;
 .authorization-form_link:hover {
   text-decoration: underline;
 }
+
 .edit-del-wrapper {
   display: flex;
   gap: 24px;

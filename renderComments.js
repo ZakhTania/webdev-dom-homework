@@ -1,10 +1,12 @@
 import { initAddLikes, initEdit, initQuotingComment, stopEmptyInput, stopPropagationForEditInput } from "./events.js";
 import { deleteComment, userName} from "./api.js";
 import { fetchAndRenderComments } from "./main.js";
-
+import { loaderCommentFeedElement } from "./renderMainPage.js";
 
 export function renderComments(comments) {
+
   const listElement = document.querySelector(".comments");
+
   const commentsHtml = comments.map((comment, index) => {
 
     return `<li class="comment" data-index="${index}">
@@ -53,7 +55,7 @@ export function renderComments(comments) {
       console.log(id);
 
       deleteComment({ id }).then(() => {
-        fetchAndRenderComments();
+        fetchAndRenderComments({ loader: loaderCommentFeedElement, waitingElement: listElement });
       });
     });
   }

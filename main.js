@@ -5,7 +5,9 @@ import { renderComments } from "./renderComments.js";
 
 let comments = [];
 
-export function fetchAndRenderComments() {
+export function fetchAndRenderComments({ loader, waitingElement }) {
+    loader.classList.remove('hidden');
+    waitingElement.classList.add('hidden');
 
     getComments()
         .then((responseDate) => {
@@ -24,6 +26,9 @@ export function fetchAndRenderComments() {
             });
 
             comments = appComments;
+
+            loader.classList.add('hidden');
+            waitingElement.classList.remove('hidden');
 
             renderComments(comments);
 

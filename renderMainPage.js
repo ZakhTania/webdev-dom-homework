@@ -1,20 +1,20 @@
 import { postComment } from "./api.js";
 import { renderLogin } from "./renderLoginPage.js";
 import { token, userName } from "./api.js";
-
+export let loaderCommentFeedElement;
 
 export const renderMainPage = ({ fetchAndRenderComments }) => {
     const appElement = document.getElementById("app");
 
     const mainPageHtml = `<div class="container">
-<div class="loading-comment" id="loading-comments">Загрузка комментариев...</div>
+<div class="loader" id="loaderCommentFeed">Загрузка комментариев...</div>
 <div id="wrapper_authorization-link"></div>
 <ul class="comments">
 </ul>
 <div id="wrapper-authorization-link">
 <p>Чтобы добавить комментарий, <a href="#" id="authorization-link">авторизируйтесь</a></p>
 </div>
-<div class="loading-comment" id="comment-loading">Комментарий добавляется...</div>
+<div class="loader" id="loaderCommentAdd">Комментарий добавляется...</div>
 <div class="add-form">
 <input type="text" class="add-form-name" placeholder="${userName}" readonly />
 <textarea type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4"></textarea>
@@ -25,14 +25,14 @@ export const renderMainPage = ({ fetchAndRenderComments }) => {
 
     appElement.innerHTML = mainPageHtml;
 
+    const authorizationLinkWrapperElement = document.getElementById("wrapper-authorization-link");
+    const addFormElement = document.querySelector(".add-form");
     const textInputElement = document.querySelector(".add-form-text");
     const btnAddCommentElement = document.querySelector(".add-form-button");
-    const addFormElement = document.querySelector(".add-form");
-    const authorizationLinkWrapperElement = document.getElementById("wrapper-authorization-link");
 
-    const loadingCommentElement = document.getElementById("comment-loading");
-    loadingCommentElement.classList.add("hidden");
-
+    loaderCommentFeedElement = document.getElementById("loaderCommentFeed")
+    const loaderCommentAddElement = document.getElementById("loaderCommentAdd");
+    loaderCommentAddElement.classList.add("hidden");
 
 
     if (token) {
@@ -43,7 +43,11 @@ export const renderMainPage = ({ fetchAndRenderComments }) => {
         addFormElement.classList.add('hidden');
     }
 
-    fetchAndRenderComments();
+    let modElement;
+    modElement = token ? addFormElement : authorizationLinkWrapperElement;
+ 
+
+    fetchAndRenderComments({ loader: loaderCommentFeedElement, waitingElement: modElement });
 
     const authorizationLinkElement = document.getElementById("authorization-link");
     authorizationLinkElement.addEventListener("click", () => {
@@ -56,12 +60,12 @@ export const renderMainPage = ({ fetchAndRenderComments }) => {
     function addComment() {
 
         addFormElement.classList.add("hidden");
-        loadingCommentElement.classList.remove("hidden");
+        loaderCommentAddElement.classList.remove("hidden");
 
         postComment({ text: textInputElement.value })
             .then(() => {
 
-                fetchAndRenderComments();
+                fetchAndRenderComments({ loader: loaderCommentFeedElement, waitingElement: modElement });
 
             })
             .then(() => {
@@ -69,12 +73,12 @@ export const renderMainPage = ({ fetchAndRenderComments }) => {
 
                 btnAddCommentElement.disabled = true;
                 addFormElement.classList.remove("hidden");
-                loadingCommentElement.classList.add("hidden");
+                loaderCommentAddElement.classList.add("hidden");
 
             })
             .catch((error) => {
                 addFormElement.classList.remove("hidden");
-                loadingCommentElement.classList.add("hidden");
+                loaderCommentAddElement.classList.add("hidden");
 
                 console.warn(error);
 
@@ -120,5 +124,6 @@ export const renderMainPage = ({ fetchAndRenderComments }) => {
 
     btnAddCommentElement.addEventListener("click", addComment);
 
-    fetchAndRenderComments();
+
 }
+
