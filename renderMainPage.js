@@ -1,6 +1,6 @@
-import { postComment } from "./api.js";
+import { postComment, userName, isLog } from "./api.js";
 import { renderLogin } from "./renderLoginPage.js";
-import { isLog, userName } from "./api.js";
+
 export let loaderCommentFeedElement;
 export let modElement;
 
@@ -122,6 +122,6 @@ export const renderMainPage = ({ fetchAndRenderComments }) => {
 
     btnAddCommentElement.addEventListener("click", addComment);
 
-// window.localStorage.clear();
+window.localStorage.clear();
 }
 

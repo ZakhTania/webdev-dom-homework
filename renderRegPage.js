@@ -1,5 +1,5 @@
 import { renderMainPage } from "./renderMainPage.js";
-import { regisration, setToken, setUsername } from "./api.js";
+import { regisration, setToken, setUsername, setLog } from "./api.js";
 import { fetchAndRenderComments } from "./main.js";
 import { renderLogin } from "./renderLoginPage.js";
 import { sanitizeHtml } from "./helper.js";
@@ -41,6 +41,7 @@ export const renderReg = () => {
             .then((responseData) => {
                 setToken(responseData.user.token);
                 setUsername(responseData.user.name);
+                setLog(true);
             })
             .then(() => {
 

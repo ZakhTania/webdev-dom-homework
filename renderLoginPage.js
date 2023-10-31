@@ -1,7 +1,8 @@
 import { renderMainPage, } from "./renderMainPage.js";
-import { login, setToken, setUsername, setLog, isLog, userName, token } from "./api.js";
+import { login, setToken, setUsername, setLog} from "./api.js";
 import { fetchAndRenderComments } from "./main.js";
 import { renderReg } from "./renderRegPage.js";
+
 
 export const renderLogin = () => {
     const appElement = document.getElementById("app");
@@ -37,7 +38,7 @@ export const renderLogin = () => {
                 setToken(responseData.user.token);
                 setUsername(responseData.user.name);
                 setLog(true);
-            
+        
             })
             .then(() => {
                 renderMainPage({ fetchAndRenderComments });

@@ -1,5 +1,5 @@
 import { initAddLikes, initEdit, initQuotingComment, stopEmptyInput, stopPropagationForEditInput } from "./events.js";
-import { deleteComment, userName} from "./api.js";
+import { deleteComment, userName } from "./api.js";
 import { fetchAndRenderComments } from "./main.js";
 import { loaderCommentFeedElement } from "./renderMainPage.js";
 
