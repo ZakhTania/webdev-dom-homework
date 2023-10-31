@@ -1,5 +1,5 @@
-import { renderMainPage } from "./renderMainPage.js";
-import { login, setToken, setUsername } from "./api.js";
+import { renderMainPage, } from "./renderMainPage.js";
+import { login, setToken, setUsername, setLog, isLog, userName, token } from "./api.js";
 import { fetchAndRenderComments } from "./main.js";
 import { renderReg } from "./renderRegPage.js";
 
@@ -24,7 +24,7 @@ export const renderLogin = () => {
 
     buttonElement.addEventListener("click", () => {
         login({
-            login:loginInputElement.value,
+            login: loginInputElement.value,
             password: passwordInputElement.value,
         })
             .then((response) => {
@@ -36,16 +36,17 @@ export const renderLogin = () => {
             .then((responseData) => {
                 setToken(responseData.user.token);
                 setUsername(responseData.user.name);
+                setLog(true);
+            
             })
             .then(() => {
-
                 renderMainPage({ fetchAndRenderComments });
             })
             .catch((error) => {
                 alert(error.message);
             })
     })
-    
+
     linkElement.addEventListener("click", renderReg)
 
 }

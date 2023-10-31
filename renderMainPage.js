@@ -1,6 +1,6 @@
 import { postComment } from "./api.js";
 import { renderLogin } from "./renderLoginPage.js";
-import { token, userName } from "./api.js";
+import { isLog, userName } from "./api.js";
 export let loaderCommentFeedElement;
 export let modElement;
 
@@ -36,16 +36,16 @@ export const renderMainPage = ({ fetchAndRenderComments }) => {
     const loaderCommentAddElement = document.getElementById("loaderCommentAdd");
     loaderCommentAddElement.classList.add("hidden");
 
-
-    if (token) {
+    if (isLog) {
         authorizationLinkWrapperElement.classList.add('hidden');
         addFormElement.classList.remove('hidden');
+
     } else {
         authorizationLinkWrapperElement.classList.remove('hidden');
         addFormElement.classList.add('hidden');
     }
 
-    modElement = token ? addFormElement : authorizationLinkWrapperElement;
+    modElement = isLog ? addFormElement : authorizationLinkWrapperElement;
 
     fetchAndRenderComments({ loader: loaderCommentFeedElement, waitingElement: modElement });
 
@@ -53,8 +53,6 @@ export const renderMainPage = ({ fetchAndRenderComments }) => {
     authorizationLinkElement.addEventListener("click", () => {
         renderLogin();
     });
-
-
 
 
     function addComment() {
@@ -124,6 +122,6 @@ export const renderMainPage = ({ fetchAndRenderComments }) => {
 
     btnAddCommentElement.addEventListener("click", addComment);
 
-
+// window.localStorage.clear();
 }
 
