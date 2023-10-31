@@ -5,22 +5,16 @@ import { renderReg } from "./renderRegPage.js";
 
 export const renderLogin = () => {
     const appElement = document.getElementById("app");
-    const loginHtml = `
-    <div class="container">
-    <div class="authorization-form">
-      <h3 class="authorization-form_title">Форма входа</h3>
-        <input type="text" id="login-input" class="auhtorization-form_input" placeholder="Введите логин" />
-        <input
-          type="password"
-          id="password-input"
-          class="auhtorization-form_input"
-          placeholder="Введите пароль"
-        />
-      <button class="authorization-form_button" id="login-button">Войти</button>
-      <a href="#" class="authorization-form_link" id="register-page_link">Зарегистрироваться</a>
-    </div>
-    </div>
-    `;
+    const loginHtml = `<div class="container">
+                        <div class="authorization-form">
+                            <h3 class="authorization-form_title">Форма входа</h3>
+                            <input type="text" id="login-input" class="auhtorization-form_input" placeholder="Введите логин" />
+                            <input type="password" id="password-input" class="auhtorization-form_input" placeholder="Введите пароль" />
+                            <button class="authorization-form_button" id="login-button">Войти</button>
+                            <a href="#" class="authorization-form_link" id="register-page_link">Зарегистрироваться</a>
+                        </div>
+                     </div>`;
+
     appElement.innerHTML = loginHtml;
 
     const buttonElement = document.getElementById("login-button");

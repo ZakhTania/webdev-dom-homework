@@ -1,25 +1,38 @@
 import { renderComments } from "./renderComments.js";
-import { delay, sanitizeHtml } from "./helper.js";
+import { sanitizeHtml, delay } from "./helper.js";
+import { likeComment, token } from "./api.js";
+import { fetchAndRenderComments } from "./main.js";
+import { modElement, loaderCommentFeedElement } from "./renderMainPage.js";
 
 export function initAddLikes(comments) {
     const likesButtonElements = document.querySelectorAll(".like-button");
 
     for (const likesButtonElement of likesButtonElements) {
-        likesButtonElement.addEventListener('click', event => {
-            const index = likesButtonElement.dataset.index;
-            comments[index].isLikeLoading = true;
 
+        if (token) {
+            likesButtonElement.disabled = false;
+        } else {
+            likesButtonElement.disabled = true;
+        }
+
+        likesButtonElement.addEventListener('click', event => {
+            event.stopPropagation();
+            const id = likesButtonElement.dataset.id;
+            const index = likesButtonElement.dataset.index;
+
+            comments[index].isLikeLoading = true;
+            renderComments(comments);
             delay(2000).then(() => {
 
-                comments[index].likesCounter = comments[index].isLiked
-                    ? comments[index].likesCounter - 1
-                    : comments[index].likesCounter + 1;
-                comments[index].isLiked = !comments[index].isLiked;
-                comments[index].isLikeLoading = false;
-                renderComments(comments);
+                likeComment({ id }).then((result) => {
+
+                    comments[index].isLiked = result.result.isLiked;
+                    comments[index].isLikeLoading = false;
+                    console.log(comments[index]);
+
+                    fetchAndRenderComments({ loader: loaderCommentFeedElement, waitingElement: modElement });
+                })
             });
-            event.stopPropagation();
-            renderComments(comments);
         })
     }
 }

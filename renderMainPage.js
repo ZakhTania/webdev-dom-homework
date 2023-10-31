@@ -2,6 +2,8 @@ import { postComment } from "./api.js";
 import { renderLogin } from "./renderLoginPage.js";
 import { token, userName } from "./api.js";
 export let loaderCommentFeedElement;
+export let modElement;
+
 
 export const renderMainPage = ({ fetchAndRenderComments }) => {
     const appElement = document.getElementById("app");
@@ -43,9 +45,7 @@ export const renderMainPage = ({ fetchAndRenderComments }) => {
         addFormElement.classList.add('hidden');
     }
 
-    let modElement;
     modElement = token ? addFormElement : authorizationLinkWrapperElement;
- 
 
     fetchAndRenderComments({ loader: loaderCommentFeedElement, waitingElement: modElement });
 

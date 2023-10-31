@@ -15,7 +15,10 @@ export const setUsername = (newUsername) => {
 
 export function getComments() {
     return fetch(commentsURL, {
-        method: "GET"
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
     })
         .then((response) => {
             if (response.status === 200) {
@@ -98,4 +101,16 @@ export function login({ login, password }) {
       .then((response) => {
         return response.json();
       })
+  }
+
+  export function likeComment({ id}) {
+    return fetch(`${commentsURL}/${id}/toggle-like`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    .then((response) => {
+      return response.json();
+    })
   }

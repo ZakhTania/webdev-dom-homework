@@ -18,7 +18,7 @@ export function fetchAndRenderComments({ loader, waitingElement }) {
                     text: comment.text,
                     date: dateFormat(comment.date),
                     likesCounter: comment.likes,
-                    isLiked: false,
+                    isLiked: comment.isLiked,
                     isLikeLoading: false,
                     isEdited: false,
                     author: comment.author.name,
