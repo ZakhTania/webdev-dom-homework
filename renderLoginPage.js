@@ -1,6 +1,7 @@
 import { renderMainPage } from "./renderMainPage.js";
 import { login, setToken, setUsername } from "./api.js";
 import { fetchAndRenderComments } from "./main.js";
+import { renderReg } from "./renderRegPage.js";
 
 export const renderLogin = () => {
     const appElement = document.getElementById("app");
@@ -10,7 +11,7 @@ export const renderLogin = () => {
       <h3 class="authorization-form_title">Форма входа</h3>
         <input type="text" id="login-input" class="auhtorization-form_input" placeholder="Введите логин" />
         <input
-          type="text"
+          type="password"
           id="password-input"
           class="auhtorization-form_input"
           placeholder="Введите пароль"
@@ -25,10 +26,11 @@ export const renderLogin = () => {
     const buttonElement = document.getElementById("login-button");
     const loginInputElement = document.getElementById("login-input");
     const passwordInputElement = document.getElementById("password-input");
+    const linkElement = document.getElementById("register-page_link")
 
     buttonElement.addEventListener("click", () => {
         login({
-            login: loginInputElement.value,
+            login:loginInputElement.value,
             password: passwordInputElement.value,
         })
             .then((response) => {
@@ -49,4 +51,7 @@ export const renderLogin = () => {
                 alert(error.message);
             })
     })
+    
+    linkElement.addEventListener("click", renderReg)
+
 }
