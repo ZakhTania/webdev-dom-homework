@@ -1,8 +1,9 @@
 import { renderComments } from "./renderComments.js";
 import { sanitizeHtml, delay } from "./helper.js";
-import { likeComment, token } from "./api.js";
+import { likeComment } from "./api.js";
 import { fetchAndRenderComments } from "./main.js";
 import { modElement, loaderCommentFeedElement } from "./renderMainPage.js";
+import { token } from "./renderLoginPage.js";
 
 export function initAddLikes(comments) {
     const likesButtonElements = document.querySelectorAll(".like-button");

@@ -1,11 +1,12 @@
-import { postComment, userName, isLog } from "./api.js";
+import { postComment } from "./api.js";
 import { renderLogin } from "./renderLoginPage.js";
+import { isLog, userName } from "./renderLoginPage.js";
 
 export let loaderCommentFeedElement;
 export let modElement;
 
 
-export const renderMainPage = ({ fetchAndRenderComments }) => {
+export const renderMainPage = ({ fetchAndRenderComments}) => {
     const appElement = document.getElementById("app");
 
     const mainPageHtml = `<div class="container">

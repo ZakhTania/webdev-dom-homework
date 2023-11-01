@@ -1,22 +1,8 @@
 import { sanitizeHtml } from "./helper.js";
-
+import { token } from "./renderLoginPage.js";
 const commentsURL = "https://wedev-api.sky.pro/api/v2/tanya-zakharova/comments";
 const userURL = "https://wedev-api.sky.pro/api/user";
 
-export let token = window.localStorage.getItem('token');
-export let userName = window.localStorage.getItem('userName');
-export let isLog = window.localStorage.getItem("log");
-
-export const setLog = (value) => {
-    window.localStorage.setItem("log", `${value}`);
-}
-
-export const setToken = (newToken) => {
-  window.localStorage.setItem('token', `${newToken}`);
-};
-export const setUsername = (newUsername) => {
-  window.localStorage.setItem('userName', `${newUsername}`);
-}
 
 export function getComments() {
     return fetch(commentsURL, {
