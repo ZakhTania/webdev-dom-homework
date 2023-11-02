@@ -1,7 +1,7 @@
-import { getComments } from "./api.js";
-import { dateFormat } from "./helper.js";
-import { renderMainPage } from "./renderMainPage.js";
-import { renderComments } from "./renderComments.js";
+import { getComments } from './api.js';
+import { format } from 'date-fns';
+import { renderMainPage } from './renderMainPage.js';
+import { renderComments } from './renderComments.js';
 
 let comments = [];
 
@@ -16,7 +16,7 @@ export function fetchAndRenderComments({ loader, waitingElement }) {
                     id: comment.id,
                     name: comment.author.name,
                     text: comment.text,
-                    date: dateFormat(comment.date),
+                    date: format(new Date(comment.date), 'yyyy-MM-dd hh.mm.ss'),
                     likesCounter: comment.likes,
                     isLiked: comment.isLiked,
                     isLikeLoading: false,
@@ -31,15 +31,11 @@ export function fetchAndRenderComments({ loader, waitingElement }) {
             waitingElement.classList.remove('hidden');
 
             renderComments(comments);
-
         })
         .catch((error) => {
             alert(error.message);
             console.warn(error);
-        })
+        });
 }
 
 renderMainPage({ fetchAndRenderComments });
-
-
-

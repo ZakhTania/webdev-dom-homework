@@ -1,62 +1,83 @@
-import { initAddLikes, initEdit, initQuotingComment, stopEmptyInput, stopPropagationForEditInput } from "./events.js";
-import { deleteComment } from "./api.js";
-import { fetchAndRenderComments } from "./main.js";
-import { loaderCommentFeedElement } from "./renderMainPage.js";
-import { userName } from "./renderLoginPage.js";
+import {
+    initAddLikes,
+    initEdit,
+    initQuotingComment,
+    stopEmptyInput,
+    stopPropagationForEditInput,
+} from './events.js';
+import { deleteComment } from './api.js';
+import { fetchAndRenderComments } from './main.js';
+import { loaderCommentFeedElement } from './renderMainPage.js';
+import { userName } from './renderLoginPage.js';
 
 export function renderComments(comments) {
+    const listElement = document.querySelector('.comments');
 
-  const listElement = document.querySelector(".comments");
-
-  const commentsHtml = comments.map((comment, index) => {
-
-    return `<li class="comment" data-index="${index}">
+    const commentsHtml = comments
+        .map((comment, index) => {
+            return `<li class="comment" data-index="${index}">
                 <div class="comment-header">
                     <div>${comment.name}</div>
                     <div class="comment-date">${comment.date}</div>
                 </div>
                 <div class="comment-body">
                       ${comment.isEdited 
-                    ? `<textarea type="textarea" class="edit-form-text" data-index="${index}" value="">${comment.text}</textarea>`
-                    : `<div class="comment-text">${comment.text.replaceAll("QUOTE_BEGIN", "<div class='quote'>").replaceAll("QUOTE_END", "</div>")}</div>`}
+                        ? `<textarea type="textarea" class="edit-form-text" data-index="${index}" value="">${comment.text}</textarea>`
+                              : `<div class="comment-text">${comment.text
+                                .replaceAll('QUOTE_BGN', '<div class="quote">')
+                                .replaceAll('QUOTE_END', '</div>')}
+                              </div>`}
                 </div>
                 <div class="comment-footer">
                     <div class="edit-del-wrapper">
-                      ${comment.author === userName 
-                      ? `<button class="edit-button" data-index="${index}">${comment.isEdited ? `Coхранить` : `Редактировать`}</button>
-                        <button class="delete-button" data-id="${comment.id}">Удалить</button>` 
-                      : ``}
+                      ${
+                          comment.author === userName
+                              ? `<button class="edit-button" data-index="${index}">${
+                                    comment.isEdited
+                                        ? `Coхранить`
+                                        : `Редактировать`
+                                }</button>
+                        <button class="delete-button" data-id="${
+                            comment.id
+                        }">Удалить</button>`
+                              : ``
+                      }
                     </div>
                     <div class="likes">
                       <p class="likes-counter">${comment.likesCounter}</p>
-                      <button class="like-button ${comment.isLiked ? `-active-like` : ``} ${comment.isLikeLoading ? `-loading-like` : ``}" data-id="${comment.id}" data-index="${index}"></button>
+                      <button class="like-button ${
+                          comment.isLiked ? `-active-like` : ``
+                      } ${
+                          comment.isLikeLoading ? `-loading-like` : ``
+                      }" data-id="${comment.id}" data-index="${index}"></button>
                     </div>
                 </div>
-          </li>`
+          </li>`;
+        })
+        .join('');
 
-  }).join('');
+    listElement.innerHTML = commentsHtml;
 
-  listElement.innerHTML = commentsHtml;
+    initAddLikes(comments);
+    initEdit(comments);
+    initQuotingComment(comments);
+    stopPropagationForEditInput();
+    stopEmptyInput();
 
-  initAddLikes(comments);
-  initEdit(comments);
-  initQuotingComment(comments);
-  stopPropagationForEditInput();
-  stopEmptyInput();
-  
-  const deleteButtonsElement = document.querySelectorAll(".delete-button");
+    const deleteButtonsElement = document.querySelectorAll('.delete-button');
 
-  for (const deleteButton of deleteButtonsElement) {
-    deleteButton.addEventListener("click", (event) => {
-      
-      event.stopPropagation();
-  
-      const id = deleteButton.dataset.id;
+    for (const deleteButton of deleteButtonsElement) {
+        deleteButton.addEventListener('click', (event) => {
+            event.stopPropagation();
 
-      deleteComment({ id }).then(() => {
-        fetchAndRenderComments({ loader: loaderCommentFeedElement, waitingElement: listElement });
-      });
-    });
-  }
+            const id = deleteButton.dataset.id;
 
+            deleteComment({ id }).then(() => {
+                fetchAndRenderComments({
+                    loader: loaderCommentFeedElement,
+                    waitingElement: listElement,
+                });
+            });
+        });
+    }
 }
