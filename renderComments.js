@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
     initAddLikes,
     initEdit,
@@ -9,6 +10,7 @@ import { deleteComment } from './api.js';
 import { fetchAndRenderComments } from './main.js';
 import { loaderCommentFeedElement } from './renderMainPage.js';
 import { userName } from './renderLoginPage.js';
+import { replaceQuote } from './helper.js';
 
 export function renderComments(comments) {
     const listElement = document.querySelector('.comments');
@@ -23,10 +25,7 @@ export function renderComments(comments) {
                 <div class="comment-body">
                       ${comment.isEdited 
                         ? `<textarea type="textarea" class="edit-form-text" data-index="${index}" value="">${comment.text}</textarea>`
-                              : `<div class="comment-text">${comment.text
-                                .replaceAll('QUOTE_BGN', '<div class="quote">')
-                                .replaceAll('QUOTE_END', '</div>')}
-                              </div>`}
+                        : `<div class="comment-text">${replaceQuote(comment.text)}</div>`}
                 </div>
                 <div class="comment-footer">
                     <div class="edit-del-wrapper">

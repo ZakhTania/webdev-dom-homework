@@ -14,6 +14,11 @@ export function delay(interval = 300) {
     });
 }
 
+export function replaceQuote(text) {
+    const newTextBgn = text.replaceAll('QUOTE_BGN', '<div class="quote">');
+    const newTextEnd = newTextBgn.replaceAll('QUOTE_END', '</div>');
+    return newTextEnd;
+}
 // export function dateFormat(commentDate) {
 
 //     let date = new Date(commentDate);
